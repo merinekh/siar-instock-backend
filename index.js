@@ -7,7 +7,7 @@ const port = process.env.PORT || 8081;
 const cors = require("cors");
 
 const inventories = require("./routes/inventories");
-const warehouses = require("./routes/inventories");
+const warehouses = require("./routes/warehouses");
 
 app.use(cors());
 app.use(express.json());
