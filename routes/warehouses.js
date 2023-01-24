@@ -11,7 +11,7 @@ const getWarehouseItems = (id) => {
 };
 
 //Return specific warehouse items by ID
-router.get("/:id", (req, res) => {
+router.get("/:id/inventories", (req, res) => {
   let id = req.params.id;
   const warehouse = getWarehouseItems(id);
 
