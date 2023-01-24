@@ -10,7 +10,7 @@ const getWarehouseItems = (id) => {
   return JSON.parse(warehouseFromFile);
 };
 
-//Return specific warehouse items
+//Return specific warehouse items by ID
 router.get("/:id", (req, res) => {
   let id = req.params.id;
   const warehouse = getWarehouseItems(id);

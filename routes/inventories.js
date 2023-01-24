@@ -8,7 +8,7 @@ const getInventoryItem = () => {
   return JSON.parse(inventoryFromFile);
 };
 
-//Return single inventory item
+//Return single inventory item by ID
 router.get("/:id", (req, res) => {
   const inventories = getInventoryItem();
 
