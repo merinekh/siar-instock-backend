@@ -12,7 +12,7 @@ exports.index = (_req, res) => {
 
 exports.singleWarehouseInventories = (req, res) => {
   knex
-    .select("warehouses.*", "inventories.warehouse_id as warehouse_id")
+    .select("warehouses.*", "inventories.*")
     .from("warehouses")
     .where({ ["warehouses.id"]: req.params.id })
     .join("inventories", "inventories.warehouse_id", "warehouses.id")
