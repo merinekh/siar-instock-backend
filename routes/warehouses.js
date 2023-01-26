@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const fs = require("node:fs");
+const warehouseController = require('../controllers/warehouseController')
 
 //Convenience function to grab data
 // const getWarehouseItems = (id) => {
@@ -11,6 +12,9 @@ const fs = require("node:fs");
 // };
 
 //Return specific warehouse items by ID
+
+router.route("/").get(warehouseController.index);
+
 
 router.get("/:id/inventories", (req, res) => {
   let id = req.params.id;
