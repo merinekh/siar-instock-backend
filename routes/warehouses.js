@@ -1,21 +1,14 @@
 const express = require("express");
 const router = express.Router();
-const fs = require("node:fs");
 
-//Convenience function to grab data
-const getWarehouseItems = (id) => {
-  const warehouseFromFile = fs.readFileSync(
-    `./data/dummy-warehouse-${id}.json`
-  );
-  return JSON.parse(warehouseFromFile);
-};
+const warehouseController = require("../controllers/warehouseController");
 
-//Return specific warehouse items by ID
-router.get("/:id/inventories", (req, res) => {
-  let id = req.params.id;
-  const warehouse = getWarehouseItems(id);
+// Get all warehouses
+router.route("/").get(warehouseController.index);
 
-  res.json(warehouse);
-});
+//Return specific warehouse items by warehouse ID
+router
+  .route("/:id/inventories")
+  .get(warehouseController.singleWarehouseInventories);
 
 module.exports = router;

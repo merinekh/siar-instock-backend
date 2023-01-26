@@ -1,19 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const fs = require("node:fs");
 
-//Convenience function to grab data
-const getInventoryItem = () => {
-  const inventoryFromFile = fs.readFileSync("./data/dummy-inventory-item.json");
-  return JSON.parse(inventoryFromFile);
-};
+const inventoryController = require("../controllers/inventoryController");
 
-//Return single inventory item by ID
-router.get("/:id", (req, res) => {
-  const inventories = getInventoryItem();
+// Get all inventory items
+router.route("/").get(inventoryController.index);
 
-  const inventory = inventories.find((item) => +item.id === +req.params.id);
-  res.json(inventory);
-});
+// Single inventory item by ID
+router.route("/:id").get(inventoryController.singleInventoryID);
 
 module.exports = router;

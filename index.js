@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+require("knex")(require("./knexfile"));
 
 require("dotenv").config();
 
@@ -15,4 +16,4 @@ app.use(express.json());
 app.use("/api/inventories", inventories);
 app.use("/api/warehouses", warehouses);
 
-app.listen(port, () => console.log(`Listening on port ${port}`)); //Line 6
+app.listen(port, () => console.log(`🚀 Listening on port ${port}...`));
