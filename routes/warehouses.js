@@ -1,18 +1,27 @@
 const express = require("express");
 const router = express.Router();
+const fs = require("fs");
 
 const warehouseController = require("../controllers/warehouseController");
 
-// Get all warehouses
-router.route("/").get(warehouseController.index);
+router.route("/").get(warehouseController.index)
+.post(warehouseController.addWarehouse);
 
-//Return specific warehouse items by warehouse ID
+
 router
-  .route("/:id/inventories")
-  .get(warehouseController.singleWarehouseInventories)
-  
-router
-.route('/:id')
+.route("/:id")
 .get(warehouseController.singleWarehouse)
-.delete(warehouseController.deleteWarehouse);
+.delete(warehouseController.deleteWarehouse)
+
+
+router
+.route("/:id/inventories")
+.get(warehouseController.singleWarehouseInventories);
+
+
+
+
+
+
+
 module.exports = router;
