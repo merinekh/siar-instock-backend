@@ -4,9 +4,34 @@ exports.index = (_req, res) => {
   knex("warehouses")
     .then((data) => {
       res.status(200).json(data);
+      
     })
     .catch((err) =>
       res.status(400).send(`Error retrieving Warehouses: ${err}`)
+    );
+};
+
+exports.singleWarehouse = (_req, res) => {
+  knex("warehouses")
+  .where({ id: _req.params.id})
+  .then((data) => {
+    res.status(200).json(data);
+    
+  })
+  .catch((err) =>
+    res.status(400).send(`Error retrieving Warehouses: ${err}`)
+  );
+}
+
+exports.deleteWarehouse = (_req, res) => {
+  knex("warehouses")
+  .delete()
+  .where({id: _req.params.id})
+    .then(() => {
+      res.status(204).send(`Warehouse with id: ${_req.params.id} has been deleted`);
+    })
+    .catch((err) =>
+    res.status(400).send(`Error deleting Warehouse ${_req.params.id} ${err}`)
     );
 };
 
