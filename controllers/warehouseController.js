@@ -45,3 +45,4 @@ exports.singleWarehouseInventories = (req, res) => {
         .send(`Error retrieving Warehouse ${req.params.id} inventory: ${err}`)
     );
 };
+exports.editWarehuse = (req, res) => {};
