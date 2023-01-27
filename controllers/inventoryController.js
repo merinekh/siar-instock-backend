@@ -10,6 +10,26 @@ exports.index = (_req, res) => {
     );
 };
 
+exports.deleteInventoryItem = (req, res) => {
+  knex
+    .select("inventory.id")
+    .from("inventories")
+    .delete()
+    .where({ id: req.params.id })
+    .then(() => {
+
+  
+      res
+        .status(204)
+        .send(`Inventory item with the id: ${req.params.id} has been deleted`);
+    })
+    .catch((err) =>
+      res
+        .status(400)
+        .send(`Error deleting inventory item ${req.params.id} ${err}`)
+    );
+};
+
 exports.singleInventoryID = (req, res) => {
   knex
     .select("inventories.*", "warehouses.warehouse_name as warehouse_name")
@@ -30,4 +50,5 @@ exports.singleInventoryID = (req, res) => {
         .status(400)
         .send(`Error retrieving Inventory item ID ${req.params.id} ${err}`)
     );
+
 };
