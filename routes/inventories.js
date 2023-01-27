@@ -11,4 +11,6 @@ router.route("/:id").get(inventoryController.singleInventoryID);
 //delete item in an inventory
 router.route('/:id').delete(inventoryController.deleteInventoryItem)
 
+// Add a new Inventory item
+router.route("/").post(inventoryController.addInventory);
 module.exports = router;
