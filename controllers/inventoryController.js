@@ -31,3 +31,24 @@ exports.singleInventoryID = (req, res) => {
         .send(`Error retrieving Inventory item ID ${req.params.id} ${err}`)
     );
 };
+
+exports.addInventory = (req, res) => {
+  if (
+    !req.body.item_name ||
+    !req.body.description ||
+    !req.body.category ||
+    !req.body.status ||
+    !req.body.quantity
+  ) {
+    return res.status(400).send("Please return all the needed fields");
+  }
+  knex("inventories")
+    .insert(req.body)
+    .then((data) => {
+      const newInventoryURL = `/inventories/${data[0]}`;
+      res.status(201).location(newInventoryURL).send(newInventoryURL);
+    })
+    .catch((err) =>
+      res.status(400).send(`Error creating Inventory item: ${err}`)
+    );
+};
