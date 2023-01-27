@@ -1,7 +1,10 @@
 const knex = require("knex")(require("../knexfile"));
 
 exports.index = (_req, res) => {
-  knex("inventories")
+  knex
+    .select("inventories.*", "warehouses.warehouse_name as warehouse_name")
+    .from("inventories")
+    .join("warehouses", "warehouses.id", "inventories.warehouse_id")
     .then((data) => {
       res.status(200).json(data);
     })
