@@ -1,10 +1,9 @@
 const knex = require("knex")(require("../knexfile"));
-
+const { v4: uuidv4 } = require("uuid");
 exports.index = (_req, res) => {
   knex("warehouses")
     .then((data) => {
       res.status(200).json(data);
-      
     })
     .catch((err) =>
       res.status(400).send(`Error retrieving Warehouses: ${err}`)
@@ -29,13 +28,15 @@ exports.singleWarehouse = (req, res) => {
 
 exports.deleteWarehouse = (_req, res) => {
   knex("warehouses")
-  .delete()
-  .where({id: _req.params.id})
+    .delete()
+    .where({ id: _req.params.id })
     .then(() => {
-      res.status(204).send(`Warehouse with id: ${_req.params.id} has been deleted`);
+      res
+        .status(204)
+        .send(`Warehouse with id: ${_req.params.id} has been deleted`);
     })
     .catch((err) =>
-    res.status(400).send(`Error deleting Warehouse ${_req.params.id} ${err}`)
+      res.status(400).send(`Error deleting Warehouse ${_req.params.id} ${err}`)
     );
 };
 
@@ -79,9 +80,29 @@ exports.addWarehouse = (req, res) => {
         "Please make sure to provide name, manager, address, phone and email fields in a request"
       );
   }
-
-  knex("warehouse")
-    .insert(req.body)
+  const {
+    warehouse_name,
+    address,
+    city,
+    country,
+    contact_name,
+    contact_position,
+    contact_phone,
+    contact_email,
+  } = req.body;
+  const postNewWarehouse = {
+    warehouse_name: warehouse_name,
+    address: address,
+    city: city,
+    country: country,
+    contact_name: contact_name,
+    contact_position: contact_position,
+    contact_phone: contact_phone,
+    contact_email: contact_email,
+    id: uuidv4(),
+  };
+  knex("warehouses")
+    .insert(postNewWarehouse)
     .then((data) => {
       // For POST requests we need to respond with 201 and the location of the newly created record
       const newWarehouseURL = `/warehouses/${data[0]}`;
