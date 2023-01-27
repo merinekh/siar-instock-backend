@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const fs = require("fs");
 
 const warehouseController = require("../controllers/warehouseController");
 
@@ -10,5 +11,11 @@ router.route("/").get(warehouseController.index);
 router
   .route("/:id/inventories")
   .get(warehouseController.singleWarehouseInventories);
+
+// ==================create a POST request for new Video==========================================
+
+router
+  .route("/") //
+  .post(warehouseController.addWarehouse);
 
 module.exports = router;
