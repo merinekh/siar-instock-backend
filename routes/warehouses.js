@@ -4,20 +4,24 @@ const fs = require("fs");
 
 const warehouseController = require("../controllers/warehouseController");
 
-// Get all warehouses
-router.route("/").get(warehouseController.index);
+router.route("/").get(warehouseController.index)
+.post(warehouseController.addWarehouse);
 
-//Single warehouse
-router.route("/:id").get(warehouseController.singleWarehouse);
-//Return specific warehouse items by warehouse ID
-router
-  .route("/:id/inventories")
-  .get(warehouseController.singleWarehouseInventories);
-
-// ==================create a POST request for new Video==========================================
 
 router
-  .route("/") //
-  .post(warehouseController.addWarehouse);
+.route("/:id")
+.get(warehouseController.singleWarehouse)
+.delete(warehouseController.deleteWarehouse)
+
+
+router
+.route("/:id/inventories")
+.get(warehouseController.singleWarehouseInventories);
+
+
+
+
+
+
 
 module.exports = router;

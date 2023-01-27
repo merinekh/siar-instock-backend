@@ -4,11 +4,39 @@ exports.index = (_req, res) => {
   knex("warehouses")
     .then((data) => {
       res.status(200).json(data);
+      
     })
     .catch((err) =>
       res.status(400).send(`Error retrieving Warehouses: ${err}`)
     );
 };
+<<<<<<< HEAD
+
+exports.singleWarehouse = (_req, res) => {
+  knex("warehouses")
+  .where({ id: _req.params.id})
+  .then((data) => {
+    res.status(200).json(data);
+    
+  })
+  .catch((err) =>
+    res.status(400).send(`Error retrieving Warehouses: ${err}`)
+  );
+}
+
+exports.deleteWarehouse = (_req, res) => {
+  knex("warehouses")
+  .delete()
+  .where({id: _req.params.id})
+    .then(() => {
+      res.status(204).send(`Warehouse with id: ${_req.params.id} has been deleted`);
+    })
+    .catch((err) =>
+    res.status(400).send(`Error deleting Warehouse ${_req.params.id} ${err}`)
+    );
+};
+
+=======
 exports.singleWarehouse = (req, res) => {
   knex("warehouses")
     .where({ id: req.params.id })
@@ -24,6 +52,7 @@ exports.singleWarehouse = (req, res) => {
       res.status(400).send(`Error retrieving warehouse ${req.params.id} ${err}`)
     );
 };
+>>>>>>> develop
 exports.singleWarehouseInventories = (req, res) => {
   knex
     .select("warehouses.*", "inventories.*")
