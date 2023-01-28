@@ -13,4 +13,7 @@ router.route('/:id').delete(inventoryController.deleteInventoryItem)
 
 // Add a new Inventory item
 router.route("/").post(inventoryController.addInventory);
+
+//Edit inventory item 
+router.route('/:id').put(inventoryController.editInventoryItem)
 module.exports = router;

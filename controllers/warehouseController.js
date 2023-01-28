@@ -4,7 +4,6 @@ exports.index = (_req, res) => {
   knex("warehouses")
     .then((data) => {
       res.status(200).json(data);
-      
     })
     .catch((err) =>
       res.status(400).send(`Error retrieving Warehouses: ${err}`)
@@ -29,28 +28,34 @@ exports.singleWarehouse = (req, res) => {
 
 exports.deleteWarehouse = (_req, res) => {
   knex("warehouses")
-  .delete()
-  .where({id: _req.params.id})
+    .delete()
+    .where({ id: _req.params.id })
     .then(() => {
-      res.status(204).send(`Warehouse with id: ${_req.params.id} has been deleted`);
+      res
+        .status(204)
+        .send(`Warehouse with id: ${_req.params.id} has been deleted`);
     })
     .catch((err) =>
-    res.status(400).send(`Error deleting Warehouse ${_req.params.id} ${err}`)
+      res.status(400).send(`Error deleting Warehouse ${_req.params.id} ${err}`)
     );
 };
 
 exports.singleWarehouseInventories = (req, res) => {
+  const URL = `http://localhost:3000/warehouse`;
   knex
     .select("warehouses.*", "inventories.*")
     .from("warehouses")
     .where({ ["warehouses.id"]: req.params.id })
     .join("inventories", "inventories.warehouse_id", "warehouses.id")
     .then((data) => {
+      console.log('');
+      
       // If record is not found, respond with 404
-      if (!data.length) {
+      if (!data) {
         return res
           .status(404)
-          .send(`Record with id: ${req.params.id} is not found`);
+          .send(`Record with id: ${req.params.id} is not found`)
+          .redirect(URL);
       }
       res.status(200).json(data);
     })
