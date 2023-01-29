@@ -15,5 +15,5 @@ router.route('/:id').delete(inventoryController.deleteInventoryItem)
 router.route("/").post(inventoryController.addInventory);
 
 //Edit inventory item 
-router.route('/:id').put(inventoryController.editInventoryItem)
+router.route('/:id').patch(inventoryController.editInventoryItem)
 module.exports = router;
