@@ -41,17 +41,21 @@ exports.deleteWarehouse = (_req, res) => {
 };
 
 exports.singleWarehouseInventories = (req, res) => {
+  const URL = `http://localhost:3000/warehouse`;
   knex
     .select("warehouses.*", "inventories.*")
     .from("warehouses")
     .where({ ["warehouses.id"]: req.params.id })
     .join("inventories", "inventories.warehouse_id", "warehouses.id")
     .then((data) => {
+      console.log('');
+      
       // If record is not found, respond with 404
-      if (!data.length) {
+      if (!data) {
         return res
           .status(404)
-          .send(`Record with id: ${req.params.id} is not found`);
+          .send(`Record with id: ${req.params.id} is not found`)
+          .redirect(URL);
       }
       res.status(200).json(data);
     })

@@ -1,3 +1,5 @@
+const { restart } = require("nodemon");
+
 const knex = require("knex")(require("../knexfile"));
 const { v4: uuidv4 } = require("uuid");
 
@@ -50,6 +52,18 @@ exports.singleInventoryID = (req, res) => {
       res
         .status(400)
         .send(`Error retrieving Inventory item ID ${req.params.id} ${err}`)
+    );
+};
+
+exports.editInventoryItem = (req, res) => {
+  knex("inventories")
+    .where({ id: req.params.id })
+    .update(req.body)
+    .then((rowsUpdated) => {
+      res.status(200).json(rowsUpdated);
+    })
+    .catch((err) =>
+      res.status(400).send(`Error updating inventory items ${err}`)
     );
 };
 
