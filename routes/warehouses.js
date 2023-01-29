@@ -13,7 +13,7 @@ router
   .route("/:id")
   .get(warehouseController.singleWarehouse)
   .delete(warehouseController.deleteWarehouse)
-  .put(warehouseController.editWarehuse);
+  .put(warehouseController.editWarehouse);
 
 router
   .route("/:id/inventories")
