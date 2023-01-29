@@ -127,8 +127,8 @@ exports.singleWarehouseInventories = (req, res) => {
     .where({ ["warehouses.id"]: req.params.id })
     .join("inventories", "inventories.warehouse_id", "warehouses.id")
     .then((data) => {
-      console.log('');
-      
+      console.log("");
+
       // If record is not found, respond with 404
       if (!data) {
         return res
@@ -144,6 +144,3 @@ exports.singleWarehouseInventories = (req, res) => {
         .send(`Error retrieving Warehouse ${req.params.id} inventory: ${err}`)
     );
 };
-
-
-
