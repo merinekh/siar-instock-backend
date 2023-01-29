@@ -1,4 +1,5 @@
 const knex = require("knex")(require("../knexfile"));
+const { v4: uuidv4 } = require("uuid");
 
 exports.index = (_req, res) => {
   knex("warehouses")
@@ -8,6 +9,85 @@ exports.index = (_req, res) => {
     })
     .catch((err) =>
       res.status(400).send(`Error retrieving Warehouses: ${err}`)
+    );
+};
+
+exports.addWarehouse = (req, res) => {
+  // Validate the request body for required data
+  if (
+    !req.body.warehouse_name ||
+    !req.body.address ||
+    !req.body.city ||
+    !req.body.country ||
+    !req.body.contact_name ||
+    !req.body.contact_position ||
+    !req.body.contact_phone ||
+    !req.body.contact_email
+  ) {
+    return res
+      .status(400)
+      .send(
+        "Please make sure to provide name, manager, address, phone and email fields in a request"
+      );
+  }
+  const {
+    warehouse_name,
+    address,
+    city,
+    country,
+    contact_name,
+    contact_position,
+    contact_phone,
+    contact_email,
+  } = req.body;
+  const postNewWarehouse = {
+    warehouse_name: warehouse_name,
+    address: address,
+    city: city,
+    country: country,
+    contact_name: contact_name,
+    contact_position: contact_position,
+    contact_phone: contact_phone,
+    contact_email: contact_email,
+    id: uuidv4(),
+  };
+  knex("warehouses")
+    .insert(postNewWarehouse)
+    .then((data) => {
+      // For POST requests we need to respond with 201 and the location of the newly created record
+      const newWarehouseURL = `/warehouses/${data[0]}`;
+      res.status(201).location(newWarehouseURL).send(newWarehouseURL);
+    })
+    .catch((err) => res.status(400).send(`Error creating Warehouse: ${err}`));
+};
+
+exports.editWarehouse = (req, res) => {
+  if (
+    !req.body.warehouse_name ||
+    !req.body.address ||
+    !req.body.city ||
+    !req.body.country ||
+    !req.body.contact_name ||
+    !req.body.contact_position ||
+    !req.body.contact_phone ||
+    !req.body.contact_email
+  ) {
+    return res
+      .status(400)
+      .send(
+        "Please make sure to provide name, manager, address, phone and email fields in a request"
+      );
+  }
+  knex("warehouses")
+    .update(req.body)
+    .where({ id: req.params.id })
+    .then(() => {
+      res
+        .status(200)
+        .send(`Warehouse with id: ${req.params.id} has been updated`);
+    })
+    .catch((err) =>
+      res.status(400).send(`Error updating Warehouse ${req.params.id} ${err}`)
     );
 };
 
@@ -61,32 +141,5 @@ exports.singleWarehouseInventories = (req, res) => {
     );
 };
 
-exports.addWarehouse = (req, res) => {
-  // Validate the request body for required data
-  if (
-    !req.body.warehouse_name ||
-    !req.body.address ||
-    !req.body.city ||
-    !req.body.country ||
-    !req.body.contact_name ||
-    !req.body.contact_position ||
-    !req.body.contact_phone ||
-    !req.body.contact_email
-  ) {
-    return res
-      .status(400)
-      .send(
-        "Please make sure to provide name, manager, address, phone and email fields in a request"
-      );
-  }
 
-  knex("warehouse")
-    .insert(req.body)
-    .then((data) => {
-      // For POST requests we need to respond with 201 and the location of the newly created record
-      const newWarehouseURL = `/warehouses/${data[0]}`;
-      res.status(201).location(newWarehouseURL).send(newWarehouseURL);
-    })
-    .catch((err) => res.status(400).send(`Error creating Warehouse: ${err}`));
-};
-exports.editWarehuse = (req, res) => {};
+
