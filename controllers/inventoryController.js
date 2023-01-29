@@ -1,6 +1,7 @@
 const { restart } = require("nodemon");
 
 const knex = require("knex")(require("../knexfile"));
+const { v4: uuidv4 } = require("uuid");
 
 exports.index = (_req, res) => {
   knex
@@ -40,7 +41,6 @@ exports.singleInventoryID = (req, res) => {
     .where({ ["inventories.id"]: req.params.id })
     .join("warehouses", "warehouses.id", "inventories.warehouse_id")
     .then((data) => {
-      // If record is not found, respond with 404
       if (!data.length) {
         return res
           .status(404)
@@ -67,7 +67,7 @@ exports.editInventoryItem = (req, res) => {
     );
 };
 
-exports.addInventory = (req, res) => {
+exports.addInventory = async (req, res) => {
   if (
     !req.body.item_name ||
     !req.body.description ||
@@ -77,13 +77,22 @@ exports.addInventory = (req, res) => {
   ) {
     return res.status(400).send("Please return all the needed fields");
   }
-  knex("inventories")
-    .insert(req.body)
-    .then((data) => {
-      const newInventoryURL = `/inventories/${data[0]}`;
-      res.status(201).location(newInventoryURL).send(newInventoryURL);
-    })
-    .catch((err) =>
-      res.status(400).send(`Error creating Inventory item: ${err}`)
-    );
+  try {
+    const warehouseId = await knex("warehouses")
+      .where("warehouse_name", req.body.warehouse_name)
+      .select("id");
+    await knex("inventories").insert({
+      id: uuidv4(),
+      item_name: req.body.item_name,
+      description: req.body.description,
+      category: req.body.category,
+      status: req.body.status,
+      quantity: req.body.quantity,
+      warehouse_id: warehouseId[0].id,
+    });
+    res.status(201).json({ message: "Inventory item added successfully" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Error adding inventory item" });
+  }
 };
