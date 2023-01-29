@@ -60,12 +60,14 @@ exports.addInventory = async (req, res) => {
     !req.body.category ||
     !req.body.status ||
     !req.body.quantity
+    //!req.body.warehouse
   ) {
+    //console.log(req.body);
     return res.status(400).send("Please return all the needed fields");
   }
   try {
     const warehouseId = await knex("warehouses")
-      .where("warehouse_name", req.body.warehouse_name)
+      .where("warehouse_name", req.body.warehouse)
       .select("id");
     await knex("inventories").insert({
       id: uuidv4(),
@@ -74,6 +76,7 @@ exports.addInventory = async (req, res) => {
       category: req.body.category,
       status: req.body.status,
       quantity: req.body.quantity,
+      //warehouse_name: req.body.warehouse,
       warehouse_id: warehouseId[0].id,
     });
     res.status(201).json({ message: "Inventory item added successfully" });
