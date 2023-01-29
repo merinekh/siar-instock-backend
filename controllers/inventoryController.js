@@ -79,7 +79,7 @@ exports.addInventory = async (req, res) => {
   }
   try {
     const warehouseId = await knex("warehouses")
-      .where("warehouse_name", req.body.warehouse_name)
+      .where("warehouse_name", req.body.warehouse)
       .select("id");
     await knex("inventories").insert({
       id: uuidv4(),

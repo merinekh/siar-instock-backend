@@ -1,9 +1,5 @@
 const knex = require("knex")(require("../knexfile"));
 const { v4: uuidv4 } = require("uuid");
-<<<<<<< HEAD
-=======
-
->>>>>>> develop
 exports.index = (_req, res) => {
   knex("warehouses")
     .then((data) => {
@@ -14,7 +10,6 @@ exports.index = (_req, res) => {
     );
 };
 
-<<<<<<< HEAD
 exports.singleWarehouse = (req, res) => {
   knex("warehouses")
     .where({ id: req.params.id })
@@ -67,8 +62,6 @@ exports.singleWarehouseInventories = (req, res) => {
     );
 };
 
-=======
->>>>>>> develop
 exports.addWarehouse = (req, res) => {
   // Validate the request body for required data
   if (
@@ -186,8 +179,8 @@ exports.singleWarehouseInventories = (req, res) => {
     .where({ ["warehouses.id"]: req.params.id })
     .join("inventories", "inventories.warehouse_id", "warehouses.id")
     .then((data) => {
-      console.log('');
-      
+      console.log("");
+
       // If record is not found, respond with 404
       if (!data) {
         return res
@@ -203,6 +196,3 @@ exports.singleWarehouseInventories = (req, res) => {
         .send(`Error retrieving Warehouse ${req.params.id} inventory: ${err}`)
     );
 };
-
-
-
