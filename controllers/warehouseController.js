@@ -4,7 +4,6 @@ exports.index = (_req, res) => {
   knex("warehouses")
     .then((data) => {
       res.status(200).json(data);
-      
     })
     .catch((err) =>
       res.status(400).send(`Error retrieving Warehouses: ${err}`)
@@ -29,13 +28,15 @@ exports.singleWarehouse = (req, res) => {
 
 exports.deleteWarehouse = (_req, res) => {
   knex("warehouses")
-  .delete()
-  .where({id: _req.params.id})
+    .delete()
+    .where({ id: _req.params.id })
     .then(() => {
-      res.status(204).send(`Warehouse with id: ${_req.params.id} has been deleted`);
+      res
+        .status(204)
+        .send(`Warehouse with id: ${_req.params.id} has been deleted`);
     })
     .catch((err) =>
-    res.status(400).send(`Error deleting Warehouse ${_req.params.id} ${err}`)
+      res.status(400).send(`Error deleting Warehouse ${_req.params.id} ${err}`)
     );
 };
 
@@ -80,7 +81,7 @@ exports.addWarehouse = (req, res) => {
       );
   }
 
-  knex("warehouse")
+  knex("warehouses")
     .insert(req.body)
     .then((data) => {
       // For POST requests we need to respond with 201 and the location of the newly created record
@@ -89,4 +90,32 @@ exports.addWarehouse = (req, res) => {
     })
     .catch((err) => res.status(400).send(`Error creating Warehouse: ${err}`));
 };
-exports.editWarehuse = (req, res) => {};
+exports.editWarehuse = (req, res) => {
+  if (
+    !req.body.warehouse_name ||
+    !req.body.address ||
+    !req.body.city ||
+    !req.body.country ||
+    !req.body.contact_name ||
+    !req.body.contact_position ||
+    !req.body.contact_phone ||
+    !req.body.contact_email
+  ) {
+    return res
+      .status(400)
+      .send(
+        "Please make sure to provide name, manager, address, phone and email fields in a request"
+      );
+  }
+  knex("warehouses")
+    .update(req.body)
+    .where({ id: req.params.id })
+    .then(() => {
+      res
+        .status(200)
+        .send(`Warehouse with id: ${req.params.id} has been updated`);
+    })
+    .catch((err) =>
+      res.status(400).send(`Error updating Warehouse ${req.params.id} ${err}`)
+    );
+};

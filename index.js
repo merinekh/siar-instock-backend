@@ -4,8 +4,7 @@ require("knex")(require("./knexfile"));
 
 require("dotenv").config();
 const cors = require("cors");
-const port = process.env.PORT || 5656;
-
+const port = process.env.PORT || 8080;
 
 const inventories = require("./routes/inventories");
 const warehouses = require("./routes/warehouses");
