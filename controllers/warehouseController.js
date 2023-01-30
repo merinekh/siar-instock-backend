@@ -121,7 +121,7 @@ exports.deleteWarehouse = (_req, res) => {
 };
 
 exports.singleWarehouseInventories = (req, res) => {
-  const URL = `http://localhost:3000/warehouse`;
+  
   knex
     .select("warehouses.*", "inventories.*")
     .from("warehouses")
@@ -135,7 +135,7 @@ exports.singleWarehouseInventories = (req, res) => {
         return res
           .status(404)
           .send(`Record with id: ${req.params.id} is not found`)
-          .redirect(URL);
+          
       }
       res.status(200).json(data);
     })
